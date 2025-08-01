@@ -1,1 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice and Text to QR Code Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        h1 {
+            color: #1f2937;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #3b82f6;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            width: calc(100% - 40px);
+            max-width: 300px;
+        }
+        #qr-code {
+            margin-top: 20px;
+            border: 2px solid #ddd;
+            padding: 10px;
+            background-color: white;
+        }
+        #text-preview {
+            margin-top: 10px;
+            font-style: italic;
+            color: #555;
+        }
+        #history {
+            margin-top: 20px;
+            text-align: left;
+            max-width: 300px;
+            width: 100%;
+        }
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            background-color: #e5e7eb;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Voice and Text to QR Code Generator</h1>
+    <div class="button-container">
+        <button onclick="startRecording()">Start Recording</button>
+        <button onclick="stopRecording()">Stop Recording</button>
+        <button onclick="refreshPage()">Refresh for New QR</button>
+        <button onclick="clearHistory()">Clear History</button>
+    </div>
+    <input type="text" id="manual-input" placeholder="Enter text manually" />
+    <button onclick="generateQRCodeFromText()">Generate QR from Text</button>
+    <div id="text-preview">Preview: <span id="preview-text"></span></div>
+    <canvas id="qr-code"></canvas>
+    <div id="history">
+        <h2>QR Code History</h2>
+        <div id="history-list"></div>
+    </div>
 
+    <script>
+        let recognition;
+        let recordedText = "";
+
+        function startRecording() {
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.continuous = true;
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const spokenText = event.results[event.results.length - 1][0].transcript;
+                recordedText += " " + spokenText;
+                document.getElementById('preview-text').textContent = recordedText.trim();
+                const formattedText = formatQRData(recordedText);
+                generateQRCode(formattedText);
+            };
+
+            recognition.onerror = function(event) {
+                alert('Error occurred in recognition: ' + event.error);
+            };
+        }
+
+        function stopRecording() {
+            if (recognition) {
+                recognition.stop();
+                console.log('Recording stopped.');
+                saveToHistory(recordedText);
+            }
+        }
+
+        function generateQRCode(text) {
+            const qrCodeCanvas = document.getElementById('qr-code');
+            QRCode.toCanvas(qrCodeCanvas, text, function (error) {
+                if (error) console.error(error);
+                else console.log('QR Code generated successfully!');
+            });
+        }
+
+        function generateQRCodeFromText() {
+            const inputText = document.getElementById('manual-input').value;
+            const formattedText = formatQRData(inputText);
+            generateQRCode(formattedText);
+            saveToHistory(inputText);
+        }
+
+        function formatQRData(inputText) {
+            return inputText.replace(/(\w+)(\s*(\d+|$))/g, (match, name, _, num) => ${name}${num || 1}).replace(/,\s*/g, ' ');
+        }
+
+        function saveToHistory(text) {
+            const history = JSON.parse(localStorage.getItem('qrHistory') || '[]');
+            history.push(text.trim());
+            localStorage.setItem('qrHistory', JSON.stringify(history));
+            displayHistory();
+        }
+
+        function displayHistory() {
+            const history = JSON.parse(localStorage.getItem('qrHistory') || '[]');
+            const historyList = document.getElementById('history-list');
+            historyList.innerHTML = history.map(item => <div class='history-item'>${item}</div>).join('');
+        }
+
+        function refreshPage() {
+            recordedText = "";
+            document.getElementById('preview-text').textContent = recordedText;
+            document.getElementById('manual-input').value = "";
+            document.getElementById('qr-code').getContext('2d').clearRect(0, 0, 200, 200);
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('qrHistory');
+            displayHistory();
+        }
+
+        window.onload = displayHistory;
+    </script>
+</body>
+</html>
