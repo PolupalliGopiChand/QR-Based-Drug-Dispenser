@@ -37,4 +37,3 @@ This project bridges healthcare and automation by replacing manual dispensing wi
 
 ---
 
-Let me know if you want the markdown to include images or live demo links.
