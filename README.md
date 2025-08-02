@@ -29,19 +29,6 @@ This project bridges healthcare and automation by replacing manual dispensing wi
 * Scalable for multi-medicine inventory
 * Optimized for low-cost healthcare delivery
 
-## 📁 Repository Structure
-
-```
-├── camera_qr_reader.py      # QR code scanner script
-├── dispenser_control.py     # Stepper motor control logic
-├── utils/
-│   ├── qr_decoder.py        # QR decoding functions
-│   └── medicine_mapper.py   # Maps QR data to motor actions
-├── media/
-│   └── demo_video.mp4       # System demo
-├── README.md
-```
-
 ## 🌱 Future Enhancements
 
 * Cloud-based prescription integration
