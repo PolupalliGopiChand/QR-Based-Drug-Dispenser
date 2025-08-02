@@ -1,5 +1,53 @@
-In such a period of rapid technology changes and the proliferation of smart systems, the Internet of Things (IoT) stands out as a life-changing force driving automation in healthcare. This work presents a QR-based drug-dispensing system that streamlines prescription and medication delivery. Using IoT technology, this system helps modernize a typical pharmacy by integrating a website for generating QR codes and an automated dispenser.
-The dispenser itself is based on a Raspberry Pi Zero 2W, with a webcam that reads QR codes containing information about prescribed medicines. The Raspberry Pi decodes the QR data and activates certain DC-geared stepper motors for dispensing tablets with remarkable accuracy. In this way, human intervention and errors in drug delivery are minimized.
-After dispensing the medicine, a secure payment gateway conveys the transaction results. This project brings together prescription management and dispenser mechanisms equipped with IoT to increase healthcare access, precision, and workflow. The proposed architecture demonstrates extensibility and adaptability, responsive to the hospital's changing needs.
-IoT integration of the existing dispensing process helps facilitate data assessment in real-time, thus promising an all-inclusive and efficient method of pharmacy management. This QR-compatible drug dispenser is in line with reshaping the norms of accuracy, efficiency, and ease of healthcare technology. 
-The paper is organized as follows: A review of previous works of medication works and adaptive drug dispensing system is given in Section 2. The methodology which includes the software and hardware implementation, are given in Section 3. The results from testing the system under various conditions are presented in Section 4, while Section 5 discusses the results and future improvements for the work. Finally, the paper ends in Section 6 with conclusions and some possible directions for future research on intelligent medication systems.
+Here's a compelling and concise `README.md` optimized for your **QR-Based Drug Dispenser** GitHub repository:
+
+---
+
+# 💊 QR-Based Drug Dispenser
+
+An intelligent, automated medication dispensing system that reads prescriptions via QR codes and delivers the right medicines with precision.
+
+## 🚀 Overview
+
+This project bridges healthcare and automation by replacing manual dispensing with a smart, camera-driven system. Doctors generate QR-coded prescriptions, which are scanned by a vending machine to dispense medicines accurately using stepper motors controlled by a Raspberry Pi.
+
+## 🔧 Tech Stack
+
+* **Hardware:** Raspberry Pi Zero 2 W, ULN2003 Driver, 28BYJ-48 Stepper Motors, Normal USB Camera
+* **Software:** Python, OpenCV, pyzbar (QR decoding), RPi.GPIO
+* **Prescription Format:** QR code containing medicine name and quantity
+
+## ⚙️ How It Works
+
+1. **Prescription Generation:** Doctor writes a prescription, auto-encoded into a QR code.
+2. **QR Scanning:** Camera scans and decodes the QR using OpenCV + pyzbar.
+3. **Processing:** Raspberry Pi identifies required medicines and quantities.
+4. **Dispensing:** Stepper motors rotate specific compartments to dispense the medication.
+
+## 🎯 Key Features
+
+* Fully automated dispensing with zero human error
+* Scalable for multi-medicine inventory
+* Optimized for low-cost healthcare delivery
+
+## 📁 Repository Structure
+
+```
+├── camera_qr_reader.py      # QR code scanner script
+├── dispenser_control.py     # Stepper motor control logic
+├── utils/
+│   ├── qr_decoder.py        # QR decoding functions
+│   └── medicine_mapper.py   # Maps QR data to motor actions
+├── media/
+│   └── demo_video.mp4       # System demo
+├── README.md
+```
+
+## 🌱 Future Enhancements
+
+* Cloud-based prescription integration
+* OTP authentication for user security
+* Mobile app integration
+
+---
+
+Let me know if you want the markdown to include images or live demo links.
